@@ -106,8 +106,8 @@ UTS/
 
 | Identitas | Keterangan |
 |---|---|
-| **Nama Mahasiswa** | *(Silakan isi nama Anda)* |
-| **NIM** | *(Silakan isi NIM Anda)* |
+| **Nama Mahasiswa** | Dilla Angelina Damiri |
+| **NIM** | 25091397095 |
 | **Program Studi** | Sarjana Terapan Manajemen Informatika |
 | **Semester** | 3 |
 | **Mata Kuliah** | Pemrograman Web |
