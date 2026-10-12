@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dapur Manis - Toko Kue & Pastry</title>
+    <meta
+      name="description"
+      content="Toko kue online Dapur Manis, menyediakan aneka pastry, donat empuk, kue tart, dan cheesecake lezat harga terjangkau."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- NOTIFIKASI TOAST -->
+    <div id="notifikasi">🛍️ Produk berhasil ditambahkan ke keranjang!</div>
+
+    <!-- HEADER DENGAN LOGO GAMBAR AI -->
+    <header>
+      <div class="logo">
+        <img src="images/logo.png" alt="Logo Dapur Manis" class="logo-img" />
+        <div class="logo-text">
+          <h1>Dapur Manis</h1>
+          <p>Kue Lezat, Harga Bersahabat</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="aktif">Beranda</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <div class="hero fade-in">
+      <h2>Selamat Datang di Dapur Manis!</h2>
+      <p>
+        Nikmati kehangatan dan kelezatan 20+ pilihan kue tart, pastry renyah,
+        donat empuk, dan cheesecake premium buatan tangan penuh cinta.
+      </p>
+      <button onclick="scrollKeProduk()">Lihat Menu Lengkap</button>
+    </div>
+
+    <!-- SECTION: 5 PROMO / DISKON SPESIAL -->
+    <section class="fade-in">
+      <div class="promo-box">
+        <div class="promo-header-wrapper">
+          <div class="promo-header-left">
+            <span class="promo-tag-mini">✨ PENAWARAN SPESIAL MINGGU INI</span>
+            <h2>Voucher & Promo Spesial 🎁</h2>
+            <p class="promo-subtitle">
+              Nikmati berbagai promo & potongan harga istimewa yang bisa Anda pilih langsung saat checkout pesanan tanpa repot menyalin kode!
+            </p>
+          </div>
+          <button class="btn-toggle-promo" id="btnTogglePromo" onclick="toggleSemuaPromo()">
+            ✨ Sembunyikan Promo
+          </button>
+        </div>
+
+        <div id="areaPromo">
+          <!-- 5 Promo dirender otomatis oleh JavaScript -->
+          <div class="promo-grid" id="gridPromo"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: 20 MENU PILIHAN (DENGAN FILTER KATEGORI) -->
+    <section id="produk" class="fade-in">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2>Katalog Menu Kami</h2>
+        <p style="color: #6b555a; font-size: 14.5px; margin-top: 8px;">
+          Pilih kategori favoritmu untuk menemukan kue idaman:
+        </p>
+      </div>
+
+      <!-- Filter Kategori Interaktif -->
+      <div class="kategori-wrapper">
+        <button class="btn-kategori aktif" onclick="filterProduk('semua', this)">Semua (20)</button>
+        <button class="btn-kategori" onclick="filterProduk('cake', this)">🍰 Cake & Tart</button>
+        <button class="btn-kategori" onclick="filterProduk('pastry', this)">🥐 Pastry</button>
+        <button class="btn-kategori" onclick="filterProduk('donat', this)">🍩 Donat</button>
+        <button class="btn-kategori" onclick="filterProduk('cookies', this)">🍪 Cookies & Macaron</button>
+      </div>
+
+      <!-- 20 Produk dirender secara dinamis oleh JavaScript -->
+      <div class="produk-grid" id="daftarProduk"></div>
+    </section>
+
+    <!-- TOMBOL FLOATING KERANJANG BELANJA -->
+    <button class="floating-cart-btn" id="floatingCartBtn" onclick="bukaKeranjang()" aria-label="Buka Keranjang Belanja">
+      <div class="floating-cart-icon-wrap">
+        🛒
+        <span class="cart-badge" id="floatingCartBadge">0</span>
+      </div>
+      <span class="floating-cart-label">Keranjang</span>
+    </button>
+
+    <!-- OVERLAY GELAP UNTUK DRAWER & MODAL -->
+    <div id="cartOverlay" class="cart-overlay" onclick="tutupSemuaModal()"></div>
+
+    <!-- DRAWER KERANJANG BELANJA (SLIDE-IN DARI KANAN) -->
+    <div id="cartDrawer" class="cart-drawer">
+      <div class="cart-drawer-header">
+        <div class="cart-title-wrap">
+          <h3>🛍️ Keranjang Belanja</h3>
+          <span class="cart-count-pill" id="cartTotalItems">0 item</span>
+        </div>
+        <button class="btn-close-drawer" onclick="tutupKeranjang()" aria-label="Tutup Keranjang">✕</button>
+      </div>
+
+      <!-- LIST ITEM KERANJANG -->
+      <div class="cart-drawer-body" id="cartItemsList">
+        <!-- Dirender otomatis oleh JavaScript -->
+      </div>
+
+      <!-- FOOTER KERANJANG: VOUCHER, TOTAL & CHECKOUT -->
+      <div class="cart-drawer-footer" id="cartFooter">
+        <!-- Bagian Pemilih Voucher Pintar -->
+        <div class="cart-voucher-box" id="cartVoucherBox">
+          <!-- Dirender dinamis oleh JavaScript -->
+        </div>
+
+        <!-- Ringkasan Harga -->
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotalText">Rp 0</span>
+          </div>
+          <div class="summary-row diskon" id="rowDiskon" style="display: none;">
+            <span>Diskon Voucher (<span id="namaVoucherAktif">-</span>)</span>
+            <span id="cartDiskonText">- Rp 0</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total Pembayaran</span>
+            <span id="cartTotalText">Rp 0</span>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="cart-actions">
+          <button class="btn-checkout" onclick="bukaCheckout()">Lanjut ke Checkout ➔</button>
+          <button class="btn-clear-cart" onclick="konfirmasiKosongkanKeranjang()">Kosongkan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DETAIL KUE, PORSI & ADD-ON (SLICES, TART, LILIN & TOPPER) -->
+    <div id="modalDetailProduk" class="modal-detail-produk">
+      <div class="modal-detail-content">
+        <button class="btn-close-modal btn-close-detail" onclick="tutupModalDetail()" aria-label="Tutup Detail Kue">✕</button>
+        <div id="modalDetailBody" class="modal-detail-body">
+          <!-- Konten detail kue, pilihan porsi, dan add-on dirender dinamis via script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CHECKOUT PEMESANAN -->
+    <div id="checkoutModal" class="checkout-modal">
+      <div class="checkout-modal-content">
+        <div class="checkout-header">
+          <div>
+            <h3>🍰 Checkout & Pemesanan</h3>
+            <p>Lengkapi data pengiriman untuk memproses pesanan kue lezat Anda</p>
+          </div>
+          <button class="btn-close-modal" onclick="tutupCheckout()" aria-label="Tutup Formulir">✕</button>
+        </div>
+
+        <div class="checkout-body">
+          <form id="formCheckout" onsubmit="prosesCheckout(event)">
+            <div class="checkout-grid">
+              <!-- Kolom Kiri: Data Pemesan & Pengiriman -->
+              <div class="checkout-col">
+                <h4 class="checkout-section-title">📍 Data Pengiriman</h4>
+
+                <div class="form-group">
+                  <label for="coNama">Nama Lengkap *</label>
+                  <input type="text" id="coNama" placeholder="Nama penerima kue..." required />
+                </div>
+
+                <div class="form-group">
+                  <label for="coTelepon">Nomor WhatsApp / HP *</label>
+                  <input type="tel" id="coTelepon" placeholder="Contoh: 081234567890" required />
+                </div>
+
+                <!-- Opsi Metode Pengiriman -->
+                <div class="form-group">
+                  <label>Opsi Pengiriman *</label>
+                  <div class="pengiriman-options">
+                    <label class="radio-label">
+                      <input type="radio" name="opsiPengiriman" value="delivery" checked onchange="gantiOpsiPengiriman(this.value)" />
+                      <span>🚚 Diantar ke Alamat (Delivery - Ongkir Rp 10.000)</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="opsiPengiriman" value="pickup" onchange="gantiOpsiPengiriman(this.value)" />
+                      <span>🏬 Ambil Sendiri di Toko (Pick-up - Bebas Ongkir)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group" id="groupAlamatPengiriman">
+                  <label for="coAlamat">Alamat Lengkap Pengiriman *</label>
+                  <textarea id="coAlamat" rows="3" placeholder="Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan, Kota" required></textarea>
+                </div>
+
+                <!-- Info Lokasi Jika Ambil di Toko -->
+                <div class="info-pickup-box" id="infoPickupBox" style="display: none;">
+                  📍 <strong>Lokasi Toko Dapur Manis:</strong><br />
+                  Jl. Cempaka Manis No. 45, Kota (Buka Pukul 08.00 - 20.00 WIB).<br />
+                  Pesanan Anda akan kami siapkan dan bisa diambil langsung tanpa biaya ongkos kirim.
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="coTanggal" id="labelCoTanggal">Tanggal Kirim *</label>
+                    <input type="date" id="coTanggal" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="coWaktu" id="labelCoWaktu">Waktu Kirim / Ambil</label>
+                    <select id="coWaktu">
+                      <option value="Pagi (08.00 - 11.00)">Pagi (08.00 - 11.00)</option>
+                      <option value="Siang (12.00 - 15.00)">Siang (12.00 - 15.00)</option>
+                      <option value="Sore (15.00 - 18.00)" selected>Sore (15.00 - 18.00)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="coCatatan">Catatan Pesanan (Opsional)</label>
+                  <input type="text" id="coCatatan" placeholder="Contoh: Lilin ultah, tulisan ucapan di kue, dll" />
+                </div>
+
+                <div class="form-group">
+                  <label>Metode Pembayaran *</label>
+                  <div class="metode-bayar-options">
+                    <label class="radio-label">
+                      <input type="radio" name="metodeBayar" value="QRIS" checked onchange="togglePilihanBank()" />
+                      <span>🟢 QRIS (Pembayaran Instan)</span>
+                    </label>
+
+                    <div id="qrisInfoCheckout" class="metode-pay-hint">
+                      📱 <strong>Scan QRIS Cepat:</strong> QR Code resmi dan nominal pembayaran akan langsung ditampilkan di struk untuk Anda scan via GoPay, OVO, Dana, BCA, atau m-Banking.
+                    </div>
+
+                    <label class="radio-label">
+                      <input type="radio" name="metodeBayar" value="Transfer Bank" id="radioTransferBank" onchange="togglePilihanBank()" />
+                      <span>🏦 Transfer Bank</span>
+                    </label>
+
+                    <!-- Dropdown Pilihan Bank & Live Info Rekening -->
+                    <div id="pilihanBankWrapper" class="bank-dropdown-wrapper" style="display: none;">
+                      <label for="selectBank" class="sub-label">Pilih Bank Tujuan:</label>
+                      <select id="selectBank" class="select-bank" onchange="perbaruiInfoBankCheckout()">
+                        <option value="BCA">Bank BCA (827-091-2345 a.n Dapur Manis)</option>
+                        <option value="Mandiri">Bank Mandiri (137-00-9876-543 a.n Dapur Manis)</option>
+                        <option value="BRI">Bank BRI (0341-01-002345-502 a.n Dapur Manis)</option>
+                        <option value="BNI">Bank BNI (084-567-8901 a.n Dapur Manis)</option>
+                        <option value="BSI">Bank Syariah Indonesia / BSI (712-345-6789 a.n Dapur Manis)</option>
+                        <option value="SeaBank">SeaBank (901-234-5678 a.n Dapur Manis)</option>
+                      </select>
+                      <div id="infoBankCheckoutBox" class="info-bank-live-card">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                      </div>
+                    </div>
+
+                    <label class="radio-label">
+                      <input type="radio" name="metodeBayar" value="COD (Bayar di Tempat)" onchange="togglePilihanBank()" />
+                      <span>💵 COD (Bayar di Tempat / saat Terima)</span>
+                    </label>
+
+                    <div id="codInfoCheckout" class="metode-pay-hint" style="display: none;">
+                      💵 <strong>Bayar Tunai:</strong> Pembayaran dilakukan secara tunai kepada kurir saat kue diantar atau di kasir saat ambil di toko Dapur Manis.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Kolom Kanan: Ringkasan Pesanan -->
+              <div class="checkout-col checkout-col-summary">
+                <h4 class="checkout-section-title">🧾 Ringkasan Pesanan</h4>
+                <div id="checkoutSummaryItems" class="checkout-summary-items">
+                  <!-- Items dimuat via JS -->
+                </div>
+
+                <!-- Bagian Pemilih Voucher di Checkout -->
+                <div class="checkout-voucher-section" id="checkoutVoucherSection">
+                  <!-- Dirender dinamis oleh JavaScript -->
+                </div>
+
+                <div class="checkout-calc-box">
+                  <div class="calc-row">
+                    <span>Subtotal Produk</span>
+                    <span id="coSubtotal">Rp 0</span>
+                  </div>
+                  <div class="calc-row diskon" id="coRowDiskon" style="display: none;">
+                    <span>Diskon Voucher (<span id="coNamaVoucher">-</span>)</span>
+                    <span id="coDiskon">- Rp 0</span>
+                  </div>
+                  <div class="calc-row">
+                    <span>Ongkos Kirim</span>
+                    <span id="coOngkir" class="text-green">Rp 10.000</span>
+                  </div>
+                  <div class="calc-row total">
+                    <span>Total Pembayaran</span>
+                    <span id="coTotalAkhir">Rp 0</span>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-konfirmasi-order">
+                  🧁 Konfirmasi & Buat Pesanan
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL PEMILIH VOUCHER & PROMO (SMART VOUCHER PICKER) -->
+    <div id="voucherModal" class="voucher-modal" onclick="handleKlikLuarVoucher(event)">
+      <div class="voucher-modal-content" onclick="event.stopPropagation()">
+        <div class="voucher-modal-header">
+          <div class="voucher-header-info">
+            <h3>🎟️ Pilih Voucher Promo</h3>
+            <p>Pilih diskon terbaik yang sesuai dengan pesanan Anda</p>
+          </div>
+          <button class="btn-close-modal" type="button" onclick="tutupModalVoucher()" aria-label="Tutup Pilihan Voucher">✕</button>
+        </div>
+
+        <div class="voucher-modal-body">
+          <!-- Keterangan Status Voucher -->
+          <div class="voucher-modal-subheading">
+            <h4>Promo Toko Tersedia</h4>
+            <span id="badgeVoucherTersedia" class="badge-voucher-count">0 promo bisa dipakai</span>
+          </div>
+
+          <!-- Daftar Voucher Card yang Dinamis Menyesuaikan Keranjang -->
+          <div id="daftarVoucherContainer" class="voucher-picker-list">
+            <!-- Dirender secara dinamis oleh JavaScript -->
+          </div>
+        </div>
+
+        <div class="voucher-modal-footer">
+          <button type="button" class="btn-tutup-voucher" onclick="tutupModalVoucher()">
+            Selesai / Kembali ke Pesanan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL STRUK PESANAN BERHASIL -->
+    <div id="successModal" class="success-modal">
+      <div class="success-content">
+        <div class="success-header">
+          <div class="success-icon">🎉</div>
+          <h3>Pesanan Berhasil Dibuat!</h3>
+          <p>Terima kasih telah memesan kue lezat di Dapur Manis</p>
+        </div>
+
+        <div id="orderReceiptDetails" class="receipt-box">
+          <!-- Diisi via JS -->
+        </div>
+
+        <div class="success-actions">
+          <button id="btnKirimWhatsApp" class="btn-wa" onclick="kirimWhatsAppPesanan()">
+            📲 Konfirmasi Pesanan via WhatsApp
+          </button>
+          <button id="btnUnduhFoto" class="btn-unduh-foto" onclick="unduhFotoStruk()">
+            📸 Unduh Foto Struk (PNG)
+          </button>
+          <button class="btn-belanja-lagi" onclick="tutupSuksesModal()">
+            🛍️ Belanja Lagi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-medsos-row">
+        <span>Media Sosial Resmi Dapur Manis:</span>
+        <div class="footer-medsos-links">
+          <a href="https://wa.me/6285816098398" target="_blank" rel="noopener noreferrer" class="footer-icon-link link-wa" title="WhatsApp (0858-1609-8398)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.53 7.34C9.36 7.34 9.09 7.4 8.87 7.65C8.65 7.89 8.02 8.48 8.02 9.7C8.02 10.92 8.91 12.1 9.03 12.26C9.15 12.42 10.74 14.99 13.25 15.96C15.35 16.78 15.77 16.61 16.23 16.57C16.69 16.53 17.7 15.96 17.91 15.38C18.12 14.79 18.12 14.29 18.06 14.18C18 14.08 17.83 14.02 17.58 13.9C17.33 13.77 16.08 13.16 15.85 13.07C15.62 12.99 15.45 12.95 15.29 13.2C15.12 13.45 14.64 14.02 14.5 14.18C14.35 14.35 14.21 14.37 13.96 14.25C13.71 14.12 12.9 13.86 11.95 13.01C11.21 12.35 10.7 11.53 10.56 11.28C10.42 11.03 10.54 10.9 10.67 10.77C10.78 10.66 10.92 10.47 11.05 10.33C11.18 10.18 11.22 10.07 11.3 9.91C11.39 9.74 11.35 9.6 11.29 9.47C11.22 9.35 10.74 8.17 10.54 7.68C10.34 7.21 10.14 7.27 9.98 7.26C9.83 7.25 9.68 7.34 9.53 7.34Z"/></svg>
+            <span>WhatsApp</span>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-icon-link link-ig" title="Instagram (@dapurmanis.bakery)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            <span>Instagram</span>
+          </a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="footer-icon-link link-tiktok" title="TikTok (@dapurmanis.official)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.86.12V9.4a6.33 6.33 0 0 0-.86-.06A6.34 6.34 0 0 0 3.1 15.68a6.34 6.34 0 0 0 10.82 4.48c.84-.85 1.34-2 1.34-3.25V8.89c1.5 1.07 3.32 1.7 5.29 1.76V7.2a4.81 4.81 0 0 1-.96-.51z"/></svg>
+            <span>TikTok</span>
+          </a>
+        </div>
+      </div>
+      <p>
+        &copy; 2026 <span>Dapur Manis</span>. Artisan Bakery & Patisserie. Seluruh Hak Cipta Dilindungi.
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
